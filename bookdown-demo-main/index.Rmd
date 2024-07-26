@@ -1,0 +1,519 @@
+--- 
+title: "Data Visualization with R"
+author: "Mohammed Amimul Ehasan Shakib"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "This repository is a comprehensive collection of useful charts and visualizations created using R, a language renowned for its capabilities in statistical computing, graphical data analysis, and scientific research."
+---
+
+# Charts
+
+This repository offers a comprehensive collection of useful charts and visualizations created using R.
+
+### Example 1: Scatter Plot
+
+
+```{r }
+library(ggplot2)
+
+# ggplot2
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  ggtitle("Scatter Plot (ggplot2)") +
+  xlab("Weight") +
+  ylab("Miles per Gallon")
+```
+
+### Example 2: Line Plot
+
+```{r }
+#Line Plot without package
+plot(1:10, 1:10, type = "l", main = "Line Plot (Base R)", xlab = "X", ylab = "Y")
+
+#Line Plot with package ggplot2
+ggplot(data.frame(x = 1:10, y = 1:10), aes(x = x, y = y)) +
+  geom_line() +
+  ggtitle("Line Plot (ggplot2)") +
+  xlab("X") +
+  ylab("Y")
+```
+
+
+### Example 3: Bar Plot
+
+```{r }
+#Bar Plot without package
+data <- table(iris$Species)
+barplot(data, main = "Bar Plot (Base R)", xlab = "Species", ylab = "Count")
+
+#Bar Plot with package ggplot2
+ 
+ggplot(data.frame(Species = levels(iris$Species)), aes(x = Species)) +
+  geom_bar() +
+  ggtitle("Species Counts") +
+  xlab("Species") +
+  ylab("Count")
+```
+
+
+
+### Example 4: Histogram
+
+```{r }
+#Histogram without package
+hist(mtcars$mpg, main = "Histogram (Base R)", xlab = "Miles per Gallon", ylab = "Frequency" )
+
+#Histogram with package ggplot2
+ggplot(mtcars, aes(x = mpg)) +
+  geom_histogram(binwidth = 2, fill = "blue", color = "black") +
+  ggtitle("Histogram (ggplot2)") +
+  xlab("Miles per Gallon") +
+  ylab("Frequency")
+```
+
+
+
+### Example 5: Box Plot
+
+```{r }
+#Box Plot without package
+boxplot(mtcars$mpg, main = "Box Plot (Base R)")
+
+#Box Plot with package ggplot2
+ggplot(mtcars, aes(y = mpg)) +
+  geom_boxplot() +
+  ggtitle("Box Plot (ggplot2)") +
+  ylab("Miles per Gallon")
+```
+
+
+
+### Example 6: Violin Plot
+
+```{r }
+#Violin Plot with package ggplot2
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violin() +
+  ggtitle("Violin Plot (ggplot2)") +
+  xlab("Species") +
+  ylab("Sepal Length")
+```
+
+
+
+### Example 7: Heatmap (pheatmap)
+
+```{r }
+# Install and load the pheatmap package (if not already installed)
+#install.packages("pheatmap")
+
+library(pheatmap)
+
+# Compute the correlation matrix for mtcars
+correlation_matrix <- cor(mtcars)
+
+# Create a heatmap
+pheatmap(correlation_matrix,
+         color = colorRampPalette(c("blue", "white", "red"))(100),
+         main = "Heatmap of mtcars",
+         cluster_rows = FALSE, cluster_cols = FALSE,
+         fontsize = 10) # Adjust font size
+```
+
+
+
+### Example 8: Time Series Plot (Base R)
+
+```{r }
+data("AirPassengers")
+ts_plot <- ts(AirPassengers, start = c(1949, 1), frequency = 12)
+plot(ts_plot, main = "Time Series Plot (Base R)", xlab = "Year", ylab = "Passengers")
+```
+
+
+
+### Example 9: 3D Scatter Plot (scatterplot3d)
+
+```{r }
+library(scatterplot3d)
+scatterplot3d(mtcars$mpg, mtcars$hp, mtcars$wt, main = "3D Scatter Plot (scatterplot3d)",
+              xlab = "MPG", ylab = "Horsepower", zlab = "Weight", color = "blue")
+```
+
+
+
+### Example 10: Pie Chart (Base R)
+
+```{r }
+#Pie Chart without package
+data <- table(iris$Species)
+pie(data, main = "Pie Chart (Base R)")
+ 
+```
+
+
+
+### Example 11: Radar Chart (fmsb)
+
+```{r }
+library(fmsb) # Load the necessary library
+
+data <- scale(iris[, 1:4]) # Select the first four columns of the iris dataset and scale them
+data <- data.frame(data, Species = iris$Species) # Create a data frame with row names as species
+
+radarchart(data, axistype = 1, title = "Radar Chart (fmsb)") # Create a radar chart
+```
+
+
+
+### Example 12: Density Plot (ggplot2)
+
+```{r }
+ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
+  geom_density(alpha = 0.5) +
+  ggtitle("Density Plot (ggplot2)") +
+  xlab("Sepal Length") +
+  ylab("Density")
+```
+
+
+
+### Example 13: Bar Chart with Error Bars (ggplot2)
+
+```{r }
+set.seed(123)
+x <- 1:10
+y <- x + rnorm(length(x))
+error <- runif(length(x), 0.1, 0.3)
+df <- data.frame(x, y, error)
+ggplot(df, aes(x = x, y = y)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin = y - error, ymax = y + error), width = 0.2) +
+  ggtitle("Bar Chart with Error Bars (ggplot2)") +
+  xlab("X") +
+  ylab("Y")
+```
+
+
+
+### Example 14: Parallel Coordinate Plot (ggplot2)
+
+```{r }
+ggplot(iris, aes(x = Species, y = Sepal.Length, color = Species)) +
+  geom_path() +  # Use geom_path for parallel coordinates
+  ggtitle("Parallel Coordinates Plot (ggplot2)") +
+  xlab("Species") +
+  ylab("Sepal Length")
+```
+
+
+
+### Example 15: Sunburst Chart (plotly)
+
+```{r }
+library(plotly)
+data <- data.frame(
+  id = c("A", "B", "C", "D", "E", "F"),
+  parent = c("", "", "", "A", "A", "D"),
+  value = c(10, 14, 12, 6, 8, 4)
+)
+fig <- plot_ly(data, ids = ~id, labels = ~id, parents = ~parent, values = ~value,
+               type = 'sunburst')
+fig <- fig %>% layout(title = "Sunburst Chart (plotly)")
+fig
+```
+
+
+
+### Example 16: Mosaic Plot (mosaic)
+
+```{r }
+# Load the mosaic package
+library(mosaic)
+library(vcd)
+
+# Load the Arthritis dataset
+data("Arthritis")
+
+# Create a mosaic plot
+mosaic(~ Improved + Treatment, data = Arthritis,
+       main = "Mosaic Plot (Arthritis)")
+```
+
+
+
+### Example 17: Word Cloud (wordcloud2)
+
+```{r }
+library(wordcloud2)
+# Create a sample word frequency data frame
+wordcloud_data <- data.frame(
+  word = c("crime1", "crime2", "crime3", "crime4", "crime5"),
+  freq = c(20, 15, 10, 5, 3)
+)
+
+# Create a word cloud
+wordcloud2(wordcloud_data, size = 0.5,
+           color = "random-dark", backgroundColor = "black")
+
+
+```
+
+
+
+### Example 18: Hexbin Plot (hexbinplot)
+
+```{r }
+library(hexbin)
+data("iris")
+hexbinplot(Petal.Length ~ Petal.Width | Species, data = iris,
+           xlab = "Petal Width", ylab = "Petal Length",
+           main = "Hexbin Plot (hexbinplot)")
+
+```
+
+
+
+### Example 19: Ternary Plot (vcd)
+
+```{r }
+library(vcd)
+
+# Create a sample matrix with 3 columns
+# Replace this with your own data
+ternary_data <- matrix(runif(300), ncol = 3)
+# Create a ternary plot
+ternaryplot(ternary_data,
+            main = "Ternary Plot (vcd)")
+```
+
+
+
+### Example 20: Candlestick Chart (quantmod)
+
+```{r }
+# Install and load the required package
+library(quantmod)
+
+# Get stock price data for AAPL (Apple Inc.) from Yahoo Finance
+getSymbols("AAPL", src = "yahoo", from = "2022-01-01", to = "2022-12-31")
+
+# Create a candlestick chart
+chartSeries(AAPL, type = "candlesticks", theme = "white",
+            name = "Apple Inc. (AAPL) Stock Prices",
+            subset = "2022-01-01::2022-12-31")
+
+```
+
+
+
+### Example 21: Wind Rose Plot (openair)
+
+```{r }
+#Install the required dependencies
+library(maps)
+library(openair)
+
+# Set a seed for reproducibility
+set.seed(123)
+
+# Generate random wind direction (0 to 360 degrees) and wind speed data
+directions <- runif(100, 0, 360)
+speeds <- runif(100, 0, 10)
+
+# Create a data frame with wind data
+wind_data <- data.frame(direction = directions, speed = speeds)
+
+# Create a wind rose plot
+windRose(mydata = wind_data,
+         ws = "speed", wd = "direction",
+         key.header = "Wind Rose Plot (openair)")
+
+```
+
+
+
+### Example 22: Sunflower Plot (graphics)
+
+```{r }
+set.seed(123)
+x <- rnorm(100)
+y <- rnorm(100)
+sunflowerplot(x, y, main = "Sunflower Plot (graphics)")
+
+```
+
+
+
+### Example 23: Cluster Dendrogram (dendextend)
+
+```{r }
+library(dendextend)
+data("mtcars")
+dend <- as.dendrogram(hclust(dist(mtcars)))
+dend <- color_branches(dend, k = 3)
+plot(dend, main = "Cluster Dendrogram (dendextend)")
+```
+
+
+
+### Example 24: Network Plot (igraph)
+
+```{r }
+library(igraph)
+set.seed(123)
+nodes <- data.frame(name = letters[1:10])
+edges <- data.frame(
+  from = sample(nodes$name, 20, replace = TRUE),
+  to = sample(nodes$name, 20, replace = TRUE)
+)
+g <- graph_from_data_frame(d = edges, vertices = nodes)
+plot(g, layout = layout_with_kk(g), vertex.label = nodes$name, main = "Network Plot (igraph)")
+```
+
+
+
+### Example 25: Radial Plot (circlize)
+
+```{r }
+# Load the circlize package
+library(circlize)
+
+# Load the mtcars dataset
+data("mtcars")
+
+# Compute the correlation matrix
+cor_matrix <- cor(mtcars)
+
+# Set row names to match column names
+rownames(cor_matrix) <- colnames(cor_matrix)
+
+# Create a chord diagram
+chordDiagram(cor_matrix, transparency = 0.5, annotationTrack = "grid",
+             preAllocateTracks = 1)
+
+# Add a title to the plot
+title(main = "Radial Plot (circlize)")
+#----------- before this line self learning
+```
+
+
+
+### Example 26: Mosaic Plot (vcd)
+
+```{r }
+library(vcd)
+data("Arthritis")
+mosaic(~ Improved + Treatment, data = Arthritis, shade = TRUE,
+       main = "Mosaic Plot (vcd)")
+```
+
+
+
+### Example 27: Star Plot (fmsb)
+
+```{r }
+# Install and load the 'fmsb' package
+#install.packages("fmsb")
+library(fmsb)
+
+# Load the 'mtcars' dataset
+data("mtcars")
+
+# Create a binary variable 'mpg01' based on median
+mtcars$mpg01 <- ifelse(mtcars$mpg > median(mtcars$mpg), "high", "low")
+
+# Create a star plot (radar chart)
+radarchart(mtcars[, 1:7], title = "Star Plot (fmsb)")
+```
+
+
+
+### Example 28: Beeswarm Plot (ggbeeswarm)
+
+```{r }
+# Install and load the 'ggbeeswarm' package
+#install.packages("ggbeeswarm")
+library(ggbeeswarm)
+
+# Load the 'mtcars' dataset
+data("mtcars")
+
+# Create a beeswarm plot
+ggplot(mtcars, aes(x = factor(cyl), y = mpg)) +
+  geom_beeswarm() +
+  ggtitle("Beeswarm Plot (ggbeeswarm)") +
+  xlab("Cylinders") +
+  ylab("Miles per Gallon")
+```
+
+
+
+### Example 29: QQ Plot (base R)
+
+```{r }
+qqnorm(rnorm(100), main = "QQ Plot (base R)")
+qqline(rnorm(100))
+```
+
+
+
+### Example 30: Parallel Coordinates Plot (ggplot2)
+
+```{r }
+library(ggplot2)
+data("iris")
+ggplot(iris, aes(x = Species, y = Sepal.Length, color = Species)) +
+  geom_path() +
+  ggtitle("Parallel Coordinates Plot (ggplot2)") +
+  xlab("Species") +
+  ylab("Sepal Length")
+```
+
+
+
+### Example 31: Venn Diagram (VennDiagram)
+
+```{r }
+library(VennDiagram)
+venn.plot <- venn.diagram(
+  x = list(A = 1:100, B = 51:150, C = 101:200),
+  category.names = c("A", "B", "C"),
+  filename = NULL
+)
+grid.draw(venn.plot)
+```
+
+
+
+### Example 32: Surface Plot (plotly)
+
+```{r }
+library(plotly)
+x <- seq(-10, 10, length = 100)
+y <- seq(-10, 10, length = 100)
+z <- outer(x, y, function(x, y) sin(sqrt(x^2 + y^2)) / sqrt(x^2 + y^2))
+plot_ly(z = ~z, type = "surface") %>% layout(title = "Surface Plot (plotly)")
+```
+
+
+
+### Example 33: Contour Plot (base R)
+
+```{r }
+x <- seq(-2 * pi, 2 * pi, length = 100)
+y <- seq(-2 * pi, 2 * pi, length = 100)
+f <- function(x, y) cos(x) * sin(y)
+z <- outer(x, y, f)
+contour(x, y, z, main = "Contour Plot (base R)", xlab = "X", ylab = "Y")
+
+```
+
+
